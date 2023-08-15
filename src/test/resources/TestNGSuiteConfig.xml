@@ -1,0 +1,22 @@
+<suite name="TestTrakt Test Suite" parallel="methods" preserve-order="true" thread-count="1">
+
+    <parameter name="ParameterToAdd" value="false"></parameter> <!-- true, false -->
+
+    <listeners>
+        
+    </listeners>
+
+    <test verbose="1" name="All Tests" annotations="JDK">
+        <groups>
+            <run>
+                <include name="All" />
+            </run>
+        </groups>
+
+        <packages>
+            <package name="*" />
+        </packages>
+        
+    </test>
+
+</suite>
