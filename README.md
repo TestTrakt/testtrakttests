@@ -6,7 +6,7 @@ Looking to validate your Smart TV and Gaming platform web apps in the earliest p
 
 ### Available Application Servers
 1. [Xbox Automator](https://www.testtrakt.org/xbox-automator) - Xbox Test Automation - Automates Xbox One Series and Xbox Series X consoles.
-2. [Tizen Autoamtor](https://www.testtrakt.org/tizen-automator) - Tizen TV Test Automation - Automates any Tizen TV 2016 or newer Television.
+2. [Tizen Automator](https://www.testtrakt.org/tizen-automator) - Tizen TV Test Automation - Automates any Tizen TV 2016 or newer Television.
 3. [Vizio Automator](https://www.testtrakt.org/vizio-automator) - Vizio TV Test Automation - Automates any Vizio TV 2015 or newer Television.
 4. LG Automator - Coming Soon!
 5. Playstation Automator - Coming Soon!
