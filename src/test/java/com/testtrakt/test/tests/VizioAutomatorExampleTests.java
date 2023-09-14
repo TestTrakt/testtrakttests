@@ -26,13 +26,13 @@ public class VizioAutomatorExampleTests {
 	private static final String APP_URL = "{YOUR_VIZIO_APPLICATION_URL_UNDER_TEST}";
 	private static final String REMOTE_API_TOKEN = "{YOUR_PAIRED_REMOTE_TOKEN}";
 
-	private static final File TESSERACT_BIN = new File("{ABSOLUTE/PATH/TO/TESSERACT/BINARY}");
-	private static final File TESSERACT_DATA_DIR = new File("/ABSOLUTE/PATH/TO/TESSERACT/TESSDATADIR");
+	private static final String TESSERACT_BIN = "{ABSOLUTE/PATH/TO/TESSERACT/BINARY}";
+	private static final String TESSERACT_DATA_DIR = "/ABSOLUTE/PATH/TO/TESSERACT/TESSDATADIR";
 	private static final String TESSERACT_LANGUAGE = "eng";
-	private static final File FFMPEG_BIN = new File("{/ABSOLUTE/PATH/TO/FFMPEG/BINARY}");
+	private static final String FFMPEG_BIN = "{/ABSOLUTE/PATH/TO/FFMPEG/BINARY}";
 	private static final String WEB_PROFILER_ID = "{YOUR_WEB_PROFILE_TOKEN}";
-	private static final File GOOGLE_VISION_OCR = new File("/ABSOLUTE/PATH/TO/GOOGLE/JSON");
-	private static final File REKOGNITION_OCR = new File("/ABSOLUTE/PATH/TO/AWS/CREDENTIALS");
+	private static final String GOOGLE_VISION_OCR = "/ABSOLUTE/PATH/TO/GOOGLE/JSON";
+	private static final String REKOGNITION_OCR = "/ABSOLUTE/PATH/TO/AWS/CREDENTIALS";
 
 	private static final String VIZIO_AUTOMATOR_ADDRESS = "http://localhost:9012";
 
