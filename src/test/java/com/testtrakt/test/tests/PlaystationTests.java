@@ -22,13 +22,13 @@ import com.testtrakt.playstationautomator.PlaystationStartRequest;
 public class PlaystationTests {
 
 	private static final String PLAYSTATION_IP_ADDRESS = "your_playstation_ip_address";
-	private static final File APP_PACKAGE = new File("C:\\path\\or\\url\\to\\your\\playstation\\application.pkg");
+	private static final String APP_PACKAGE = "C:\\path\\or\\url\\to\\your\\playstation\\application.pkg";
 	private static final String TITLE_ID = "title_id_of_application_to_install";
 
-	private static final File TESSERACT_BIN = new File("path_to_tesseract_binary");
-	private static final File TESSERACT_DATA_DIR = new File("path_to_tessdata");
+	private static final String TESSERACT_BIN = "C:\\absolute\\path\\to\\tesseract.exe";
+	private static final String TESSERACT_DATA_DIR = "C:\\absolute\\path\\to\\tesseract\\tessdata";
 	private static final String TESSERACT_LANGUAGE = "eng";
-	private static final File FFMPEG_BIN = new File("path_to_ffmpeg");
+	private static final String FFMPEG_BIN = "C:\\absolute\\path\\to\\ffmpeg.exe";
 	private static final String WEB_PROFILER_ID = "your_web_profiler_id";
 
 	private static final String PLAYSTATION_AUTOMATOR_ADDRESS = "http://localhost:9014";
