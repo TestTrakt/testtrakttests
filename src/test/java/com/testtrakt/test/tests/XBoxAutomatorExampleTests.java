@@ -39,13 +39,13 @@ public class XBoxAutomatorExampleTests {
 	private static final String XBOX_IP_ADDRESS = "your_xbox_ip_address";
 	private static final String APP_URL = "path_or_url_to_your_xbox_appx_or_appxbundle";
 	private static final String APP_NAME = "your_app_name";
-	private static final File TESSERACT_BIN = new File("path_to_tesseract_binary");
-	private static final File TESSERACT_DATA_DIR = new File("path_to_tessdata");
+	private static final String TESSERACT_BIN = "path_to_tesseract_binary";
+	private static final String TESSERACT_DATA_DIR = "path_to_tessdata";
 	private static final String TESSERACT_LANGUAGE = "eng";
-	private static final File FFMPEG_BIN = new File("path_to_ffmpeg");
+	private static final String FFMPEG_BIN = "path_to_ffmpeg";
 	private static final String WEB_PROFILER_ID = "your_web_profiler_id";
-	private static final File GOOGLE_VISION_OCR = new File("path_to_google_vision_credentials");
-	private static final File TEXTRACT_OCR = new File("path_to_texttract_credentials");
+	private static final String GOOGLE_VISION_OCR = "path_to_google_vision_credentials";
+	private static final String TEXTRACT_OCR = "path_to_texttract_credentials";
 
 	private static final String XBOX_AUTOMATOR_ADDRESS = "http://localhost:9011";
 	private static final String CHARLES_PROXIFIER_ADDRESS = "http://localhost:8665";
