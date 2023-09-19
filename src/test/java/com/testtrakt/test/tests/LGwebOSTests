@@ -1,0 +1,313 @@
+package com.rokuality.test.tests;
+
+import java.io.File;
+import java.net.URI;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import org.testng.Assert;
+import org.testng.annotations.*;
+
+import com.testtrakt.common.Element;
+import com.testtrakt.common.HTMLElement;
+import com.testtrakt.common.LocatorRequest;
+import com.testtrakt.common.OptionsRequest;
+import com.testtrakt.common.enums.LocatorType;
+import com.testtrakt.common.exceptions.ElementNotFoundException;
+import com.testtrakt.lgautomator.LGAutomator;
+import com.testtrakt.lgautomator.LGControllerButton;
+import com.testtrakt.lgautomator.LGControllerPress;
+import com.testtrakt.lgautomator.LGStartRequest;
+
+public class LGTests {
+
+	private static final String LG_IP_ADDRESS = "LG_WEBOS_TV_IP_ADDRESS";
+	private static final String APP_PACKAGE = "PATH_OR_URL_TO_LG_APP_PACKAGE.ipk";
+
+	private static final String TESSERACT_BIN = "PATH_TO_TESSERACT_BINARY";
+	private static final String TESSERACT_DATA_DIR = "PATH_TO_TESSDATA_DIR";
+	private static final String TESSERACT_LANGUAGE = "eng";
+	private static final String FFMPEG_BIN = "PATH_TO_FFMPEG_BINARY";
+	private static final String WEB_PROFILER_ID = "WEB_PROFILER_ID";
+	private static final String GOOGLE_VISION_OCR = "PATH_TO_GOOGLE_VISION_CREDS.json";
+	private static final String REKOGNITION_OCR = "PATH_TO_AWS_CREDENTIALS";
+	private static final String IP_CAMERA = "ONVIF_CAPABLE_IP_CAMERA_IP_ADDRESS";
+
+	private static final String LG_AUTOMATOR_ADDRESS = "http://localhost:9014";
+
+	LGAutomator lgAutomator = null;
+
+	@AfterMethod (alwaysRun = true)
+	public void afterTest() {
+		if (lgAutomator != null) {
+			lgAutomator.quit();
+		}
+	}
+
+	@BeforeMethod (alwaysRun = true)
+	public void beforeTest() throws Exception {
+		
+	}
+
+	@Test(groups = { "LG" })
+	public void findElementByTesseractTest() throws Exception {
+		// create a start request with an app url that is a publicly available url
+		LGStartRequest lgStartRequest = new LGStartRequest(LG_IP_ADDRESS)
+			.withWebProfilerID(WEB_PROFILER_ID)
+			.withAppPackage(APP_PACKAGE)
+			.withTesseractOCR(TESSERACT_BIN, TESSERACT_DATA_DIR, TESSERACT_LANGUAGE)
+			.withFFMPEG(FFMPEG_BIN)
+			.withIPCamera(IP_CAMERA);
+
+		// start our lg session
+		lgAutomator = new LGAutomator(new URI(LG_AUTOMATOR_ADDRESS), lgStartRequest);
+
+		// find an element
+		List<Element> elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.TEXT, "TestTrakt Application Web Profiler Test Site").withTimeout(40, TimeUnit.SECONDS));
+		Assert.assertEquals(elements.size(), 1);
+		Element element = elements.get(0);
+		System.out.println("Element: " + element.asJSON());
+
+		Assert.assertTrue(element.getConfidence() > 90.0f);
+		Assert.assertTrue(element.getX() > 10 && element.getX() < 15);
+		Assert.assertTrue(element.getY() > 170 && element.getY() < 180);
+		Assert.assertTrue(element.getWidth() > 310 && element.getWidth() < 330);
+		Assert.assertTrue((element.getHeight() > 40 && element.getHeight() < 45));
+		Assert.assertEquals(element.getText(), "TestTrakt Application Web Profiler Test Site");
+	
+	}
+
+	@Test(groups = { "LG" })
+	public void findElementByGoogleVisionTest() throws Exception {
+		
+		// create a start request with an app url that is a publicly available url
+		LGStartRequest lgStartRequest = new LGStartRequest(LG_IP_ADDRESS)
+			.withWebProfilerID(WEB_PROFILER_ID)
+			.withAppPackage(APP_PACKAGE)
+			.withGoogleVisionOCR(GOOGLE_VISION_OCR)
+			.withIPCamera(IP_CAMERA);
+
+		// start our lg session
+		lgAutomator = new LGAutomator(new URI(LG_AUTOMATOR_ADDRESS), lgStartRequest);
+
+		// find an element
+		List<Element> elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.TEXT, "TestTrakt Application Web Profiler Test Site").withTimeout(45, TimeUnit.SECONDS));
+		Assert.assertEquals(elements.size(), 1);
+		Element element = elements.get(0);
+		System.out.println("Element: " + element.asJSON());
+
+		Assert.assertTrue(element.getConfidence() == 0.0);
+		Assert.assertTrue(element.getX() > 8 && element.getX() < 15);
+		Assert.assertTrue(element.getY() > 170 && element.getY() < 180);
+		Assert.assertTrue(element.getWidth() > 310 && element.getWidth() < 330);
+		Assert.assertTrue((element.getHeight() > 40 && element.getHeight() < 50));
+		Assert.assertEquals(element.getText(), "TestTrakt Application Web Profiler Test Site");
+
+		// find multiple elements
+		elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.TEXT, "TestTrakt Application Web Profiler Test Site").findAll(true));
+		Assert.assertEquals(elements.size(), 2);
+		element = elements.get(1);
+		System.out.println("Element 2: " + element.asJSON());
+		
+		Assert.assertTrue(element.getConfidence() == 0.0);
+		Assert.assertTrue(element.getX() > 8 && element.getX() < 15);
+		Assert.assertTrue(element.getY() > 320 && element.getY() < 325);
+		Assert.assertTrue(element.getWidth() > 310 && element.getWidth() < 330);
+		Assert.assertTrue((element.getHeight() > 40 && element.getHeight() < 55));
+		Assert.assertEquals(element.getText(), "TestTrakt Application Web Profiler Test Site");
+	}
+
+	@Test(groups = { "LG" })
+	public void findElementByRekognitionTest() throws Exception {
+		// create a start request with an app url that is a publicly available url
+		LGStartRequest lgStartRequest = new LGStartRequest(LG_IP_ADDRESS)
+			.withWebProfilerID(WEB_PROFILER_ID)
+			.withAppPackage(APP_PACKAGE)
+			.withAmazonRekognitionOCR(REKOGNITION_OCR)
+			.withIPCamera(IP_CAMERA);
+
+		// start our lg session
+		lgAutomator = new LGAutomator(new URI(LG_AUTOMATOR_ADDRESS), lgStartRequest);
+
+		// find an element
+		List<Element> elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.TEXT, "TestTrakt Application Web Profiler Test Site").withTimeout(45, TimeUnit.SECONDS));
+		Assert.assertEquals(elements.size(), 1);
+		Element element = elements.get(0);
+		System.out.println("Element: " + element.asJSON());
+
+		Assert.assertTrue(element.getConfidence() == 100.0);
+		Assert.assertTrue(element.getX() > 8 && element.getX() < 15);
+		Assert.assertTrue(element.getY() > 170 && element.getY() < 180);
+		Assert.assertTrue(element.getWidth() > 310 && element.getWidth() < 330);
+		Assert.assertTrue((element.getHeight() > 40 && element.getHeight() < 50));
+		Assert.assertEquals(element.getText(), "TestTrakt Application Web Profiler Test Site");
+
+		// find multiple elements
+		elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.TEXT, "TestTrakt Application Web Profiler Test Site").findAll(true));
+		Assert.assertEquals(elements.size(), 2);
+		element = elements.get(1);
+		System.out.println("Element 2: " + element.asJSON());
+		
+		Assert.assertTrue(element.getConfidence() == 100.0);
+		Assert.assertTrue(element.getX() > 8 && element.getX() < 15);
+		Assert.assertTrue(element.getY() > 320 && element.getY() < 325);
+		Assert.assertTrue(element.getWidth() > 310 && element.getWidth() < 330);
+		Assert.assertTrue((element.getHeight() > 40 && element.getHeight() < 55));
+		Assert.assertEquals(element.getText(), "TestTrakt Application Web Profiler Test Site");
+	}
+	
+	@Test(groups = { "LG" })
+	public void findElementByImageTest() throws Exception {
+		LGStartRequest lgStartRequest = new LGStartRequest(LG_IP_ADDRESS)
+			.withWebProfilerID(WEB_PROFILER_ID)
+			.withAppPackage(APP_PACKAGE)
+			.withTesseractOCR(TESSERACT_BIN, TESSERACT_DATA_DIR, TESSERACT_LANGUAGE)
+			.withFFMPEG(FFMPEG_BIN)
+			.withIPCamera(IP_CAMERA);
+
+		// start our lg session
+		lgAutomator = new LGAutomator(new URI(LG_AUTOMATOR_ADDRESS), lgStartRequest);
+
+		// set an image element similary default
+		lgAutomator.options().set(new OptionsRequest().setDefaultImageFindSimilarity(.90));
+
+		// get the sub screen image of our device to use as a locator for later
+		File savedImage = lgAutomator.display().getImage(0, 0, 200, 200);
+		
+		// find an element by filepath
+		List<Element> elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.IMAGE, savedImage.getAbsolutePath()).withTimeout(45, TimeUnit.SECONDS));
+		Assert.assertEquals(elements.size(), 1);
+		Element element = elements.get(0);
+		System.out.println("Element: " + element.asJSON());
+		Assert.assertTrue(element.getConfidence() == 100.0);
+		Assert.assertTrue(element.getWidth() == 200);
+		Assert.assertTrue(element.getHeight() == 200);
+		Assert.assertTrue(element.getX() == 0);
+		Assert.assertTrue(element.getY() == 0);
+		Assert.assertTrue(element.getText().contains("Offline"));
+
+		// an image element that's NOT findAll and NOT found should return an empty collection
+		ElementNotFoundException elementNotFoundException = null;
+		try {
+			lgAutomator.locator().locate(new LocatorRequest(LocatorType.IMAGE, "https://testtraktresources.s3.amazonaws.com/TestTraktLogo.png").withTimeout(10, TimeUnit.SECONDS));
+		} catch (ElementNotFoundException e) {
+			elementNotFoundException = e;
+		}
+		Assert.assertNotNull(elementNotFoundException);
+
+	}
+	
+	@Test(groups = { "LG" })
+	public void findElementByCssTest() throws Exception {
+		LGStartRequest lgStartRequest = new LGStartRequest(LG_IP_ADDRESS)
+			.withWebProfilerID(WEB_PROFILER_ID)
+			.withAppPackage(APP_PACKAGE)
+			.withTesseractOCR(TESSERACT_BIN, TESSERACT_DATA_DIR, TESSERACT_LANGUAGE)
+			.withFFMPEG(FFMPEG_BIN);
+
+		// start our lg session
+		lgAutomator = new LGAutomator(new URI(LG_AUTOMATOR_ADDRESS), lgStartRequest);
+
+		// find an element by a css locator within your application
+		List<Element> elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.CSS, "p[id='testtraktidentifier']").withTimeout(10, TimeUnit.SECONDS));
+		Assert.assertEquals(elements.size(), 1);
+		Element element = elements.get(0);
+		System.out.println("Element: " + element.asJSON());
+		Assert.assertTrue(element.getConfidence() == 100.0);
+		Assert.assertTrue(element.getWidth() == 0);
+		Assert.assertTrue(element.getHeight() == 0);
+		Assert.assertTrue(element.getX() == 0);
+		Assert.assertTrue(element.getY() == 0);
+		Assert.assertEquals(element.getText(), "TestTrakt Application Web Profiler Test Site");
+
+		// find all elements that match a css locator within your application
+		elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.CSS, "p[id*='testtraktidentifier']").findAll(true));
+		Assert.assertEquals(elements.size(), 2);
+		element = elements.get(1);
+		System.out.println("Element 2: " + element.asJSON());
+		Assert.assertTrue(element.getConfidence() == 100.0);
+		Assert.assertTrue(element.getWidth() == 0);
+		Assert.assertTrue(element.getHeight() == 0);
+		Assert.assertTrue(element.getX() == 0);
+		Assert.assertTrue(element.getY() == 0);
+		Assert.assertEquals(element.getText(), "TestTrakt Application Web Profiler Test Site");
+
+		// converting the element to an html element allows us to get attributes and css details on the element
+		HTMLElement htmlElement = element.toHTMLElement();
+		Assert.assertEquals(htmlElement.getAttribute("id"), "testtraktidentifier2");
+		Assert.assertEquals(htmlElement.getCssValue("align-content"), "normal");
+	}
+	
+	@Test(groups = { "LG" })
+	public void remoteControlInteractTest() throws Exception {
+		LGStartRequest lgStartRequest = new LGStartRequest(LG_IP_ADDRESS)
+			.withWebProfilerID(WEB_PROFILER_ID)
+			.withAppPackage(APP_PACKAGE)
+			.withTesseractOCR(TESSERACT_BIN, TESSERACT_DATA_DIR, TESSERACT_LANGUAGE)
+			.withFFMPEG(FFMPEG_BIN);
+
+		// start our lg session
+		lgAutomator = new LGAutomator(new URI(LG_AUTOMATOR_ADDRESS), lgStartRequest);
+
+		// find an element
+		List<Element> elements = lgAutomator.locator().locate(new LocatorRequest(LocatorType.TEXT, "TestTrakt Application Web Profiler Test Site").withTimeout(45, TimeUnit.SECONDS));
+		Assert.assertTrue(elements.size() > 0);
+
+		// perform remote control operations against the device
+		lgAutomator.controller().sendCommand(new LGControllerPress(LGControllerButton.MENU));
+		lgAutomator.controller().sendCommand(new LGControllerPress(LGControllerButton.LEFT_ARROW));
+		lgAutomator.controller().sendCommand(new LGControllerPress(LGControllerButton.DOWN_ARROW));
+		
+	}
+	
+	@Test(groups = { "LG" })
+	public void webProfilerTest() throws Exception {
+		LGStartRequest lgStartRequest = new LGStartRequest(LG_IP_ADDRESS)
+			.withWebProfilerID(WEB_PROFILER_ID)
+			.withAppPackage(APP_PACKAGE)
+			.withTesseractOCR(TESSERACT_BIN, TESSERACT_DATA_DIR, TESSERACT_LANGUAGE)
+			.withFFMPEG(FFMPEG_BIN);
+
+		// start our lg session
+		lgAutomator = new LGAutomator(new URI(LG_AUTOMATOR_ADDRESS), lgStartRequest);
+
+		// find an element
+		lgAutomator.locator().locate(new LocatorRequest(LocatorType.XPATH, "//p").withTimeout(45, TimeUnit.SECONDS));
+		
+		// gets our application page source
+		String pageSource = lgAutomator.webProfiler().getPageSource();
+		Assert.assertTrue(pageSource.contains("TestTrakt"));
+
+		// execute javascript against our application
+		String scriptResult = lgAutomator.webProfiler().executeScript("document.documentElement.innerHTML");
+		Assert.assertTrue(scriptResult.contains("<p>"));
+	}
+
+	@Test(groups = { "LG" })
+	public void screenTest() throws Exception {
+		LGStartRequest lgStartRequest = new LGStartRequest(LG_IP_ADDRESS)
+			.withWebProfilerID(WEB_PROFILER_ID)
+			.withAppPackage(APP_PACKAGE)
+			.withTesseractOCR(TESSERACT_BIN, TESSERACT_DATA_DIR, TESSERACT_LANGUAGE)
+			.withFFMPEG(FFMPEG_BIN);
+
+		// start our lg session
+		lgAutomator = new LGAutomator(new URI(LG_AUTOMATOR_ADDRESS), lgStartRequest);
+
+		lgAutomator.locator().locate(new LocatorRequest(LocatorType.TEXT, "TestTrakt").withTimeout(45, TimeUnit.SECONDS));
+
+		// get the image/sub image from our application
+		Assert.assertTrue(lgAutomator.display().getImage().exists());
+		Assert.assertTrue(lgAutomator.display().getImage(400, 300, 300, 300).exists());
+		
+		// get the resolution width/height
+		Assert.assertEquals(lgAutomator.display().getResolution().getWidth(), 1920.0);
+		Assert.assertEquals(lgAutomator.display().getResolution().getHeight(), 823.0);
+
+		// get a compiled video recording of our application from test start to now
+		File recording = lgAutomator.display().getRecording();
+		Assert.assertTrue(recording.exists());
+		System.out.println("Video saved to: " + recording.getAbsolutePath());
+	}
+
+}
